@@ -1,0 +1,226 @@
+{
+  "metadata": {
+    "analysis_date": "2025-11-10 05:29:00",
+    "total_reports": 13,
+    "total_sectors": 10,
+    "total_stocks": 1
+  },
+  "sector_analysis": {
+    "rankings": [
+      {
+        "rank": 1,
+        "sector": "科技",
+        "score": 90.51,
+        "frequency": 582,
+        "coverage": 13,
+        "sentiment": 0.37,
+        "scoring_details": {
+          "frequency_score": 40.0,
+          "coverage_score": 30.0,
+          "sentiment_score": 20.51
+        }
+      },
+      {
+        "rank": 2,
+        "sector": "消费",
+        "score": 72.71,
+        "frequency": 323,
+        "coverage": 13,
+        "sentiment": 0.37,
+        "scoring_details": {
+          "frequency_score": 22.2,
+          "coverage_score": 30.0,
+          "sentiment_score": 20.51
+        }
+      },
+      {
+        "rank": 3,
+        "sector": "周期",
+        "score": 66.04,
+        "frequency": 226,
+        "coverage": 13,
+        "sentiment": 0.37,
+        "scoring_details": {
+          "frequency_score": 15.53,
+          "coverage_score": 30.0,
+          "sentiment_score": 20.51
+        }
+      },
+      {
+        "rank": 4,
+        "sector": "TMT",
+        "score": 58.21,
+        "frequency": 112,
+        "coverage": 13,
+        "sentiment": 0.37,
+        "scoring_details": {
+          "frequency_score": 7.7,
+          "coverage_score": 30.0,
+          "sentiment_score": 20.51
+        }
+      },
+      {
+        "rank": 5,
+        "sector": "医药",
+        "score": 57.32,
+        "frequency": 132,
+        "coverage": 12,
+        "sentiment": 0.37,
+        "scoring_details": {
+          "frequency_score": 9.07,
+          "coverage_score": 27.69,
+          "sentiment_score": 20.55
+        }
+      },
+      {
+        "rank": 6,
+        "sector": "金融",
+        "score": 55.83,
+        "frequency": 111,
+        "coverage": 12,
+        "sentiment": 0.37,
+        "scoring_details": {
+          "frequency_score": 7.63,
+          "coverage_score": 27.69,
+          "sentiment_score": 20.51
+        }
+      },
+      {
+        "rank": 7,
+        "sector": "新能源",
+        "score": 52.41,
+        "frequency": 64,
+        "coverage": 12,
+        "sentiment": 0.35,
+        "scoring_details": {
+          "frequency_score": 4.4,
+          "coverage_score": 27.69,
+          "sentiment_score": 20.31
+        }
+      },
+      {
+        "rank": 8,
+        "sector": "汽车",
+        "score": 49.25,
+        "frequency": 52,
+        "coverage": 11,
+        "sentiment": 0.35,
+        "scoring_details": {
+          "frequency_score": 3.57,
+          "coverage_score": 25.38,
+          "sentiment_score": 20.29
+        }
+      },
+      {
+        "rank": 9,
+        "sector": "地产",
+        "score": 48.11,
+        "frequency": 64,
+        "coverage": 10,
+        "sentiment": 0.38,
+        "scoring_details": {
+          "frequency_score": 4.4,
+          "coverage_score": 23.08,
+          "sentiment_score": 20.63
+        }
+      },
+      {
+        "rank": 10,
+        "sector": "军工",
+        "score": 47.04,
+        "frequency": 55,
+        "coverage": 10,
+        "sentiment": 0.35,
+        "scoring_details": {
+          "frequency_score": 3.78,
+          "coverage_score": 23.08,
+          "sentiment_score": 20.18
+        }
+      }
+    ],
+    "summary": "最受关注的三大板块：科技, 消费, 周期。 市场情绪最积极的板块：科技, 消费, 周期。"
+  },
+  "stock_analysis": {
+    "rankings": [
+      {
+        "rank": 1,
+        "stock_code": "600089",
+        "score": 57.31,
+        "frequency": 2,
+        "coverage": 1,
+        "sentiment": 0.0
+      }
+    ]
+  },
+  "investment_logic": {
+    "top_investment_logics": [
+      {
+        "logic": "因为上周在去跟大家去讲行情的时候呢",
+        "frequency": 1
+      },
+      {
+        "logic": "其实我们还是做了一个比较好的一个预期啊，就是如果",
+        "frequency": 1
+      },
+      {
+        "logic": "因为本质上市场指数呢，是创造新高，但是很多朋友可能现在感觉到了整个赚钱的",
+        "frequency": 1
+      },
+      {
+        "logic": "对吧，这一次应该基本上有70%左右的朋友都应该是处在一个满仓或者是九成仓位的一个状态啊，因为我们",
+        "frequency": 1
+      },
+      {
+        "logic": "比较好的上行的一个空间，这里面呢，不包不仅包含在指数指数层面上，其实包也包含了很多的一些结构性的一些轮动，因为你最近呢",
+        "frequency": 1
+      },
+      {
+        "logic": "因为反正确实是呃，最近呃，不是已经不是两个月了，今天应该更新一下，其实是三个月了",
+        "frequency": 1
+      },
+      {
+        "logic": "我不能明着讲，觉得创销没机会了啊，这个因为分析师公开抗看空，这肯定是非常",
+        "frequency": 1
+      },
+      {
+        "logic": "器械啊，才有可能把估值啊，那么创新要把估值我们今年上半年已经非常已经大家都有所体会了",
+        "frequency": 1
+      },
+      {
+        "logic": "但是医疗器械一直在底部啊，一直在底部啊，那么什么时候拔估值呢",
+        "frequency": 1
+      },
+      {
+        "logic": "脑机我讲了第一，明年是商业化的元年，因为明年",
+        "frequency": 1
+      }
+    ]
+  },
+  "cross_validation": {
+    "科技": {
+      "consensus_rate": 100.0,
+      "reports_count": 13,
+      "confidence_level": "高"
+    },
+    "消费": {
+      "consensus_rate": 100.0,
+      "reports_count": 13,
+      "confidence_level": "高"
+    },
+    "周期": {
+      "consensus_rate": 100.0,
+      "reports_count": 13,
+      "confidence_level": "高"
+    },
+    "TMT": {
+      "consensus_rate": 100.0,
+      "reports_count": 13,
+      "confidence_level": "高"
+    },
+    "医药": {
+      "consensus_rate": 92.31,
+      "reports_count": 12,
+      "confidence_level": "高"
+    }
+  }
+}
