@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Color Block - Mac休闲游戏</title>
+    <title>Color Block - 测试版</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -20,7 +19,6 @@
             min-height: 100vh;
             padding: 20px;
         }
-
         .game-container {
             background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
@@ -29,23 +27,11 @@
             max-width: 600px;
             width: 100%;
         }
-
         h1 {
             text-align: center;
             color: #333;
-            margin-bottom: 10px;
-            font-size: 2.5em;
-            font-weight: 700;
-            letter-spacing: -1px;
+            margin-bottom: 20px;
         }
-
-        .subtitle {
-            text-align: center;
-            color: #666;
-            margin-bottom: 30px;
-            font-size: 0.9em;
-        }
-
         .score-board {
             display: flex;
             justify-content: space-around;
@@ -54,25 +40,18 @@
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             border-radius: 15px;
         }
-
         .score-item {
             text-align: center;
         }
-
         .score-label {
             color: #666;
             font-size: 0.9em;
-            margin-bottom: 5px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
         }
-
         .score-value {
             color: #333;
             font-size: 2em;
             font-weight: 700;
         }
-
         #gameCanvas {
             display: block;
             margin: 0 auto 20px;
@@ -81,13 +60,6 @@
             cursor: pointer;
             background: #fff;
         }
-
-        .button-container {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-        }
-
         button {
             padding: 15px 40px;
             font-size: 1em;
@@ -97,90 +69,27 @@
             border: none;
             border-radius: 10px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            display: block;
+            margin: 0 auto;
         }
-
         button:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
         }
-
-        button:active {
-            transform: translateY(0);
-        }
-
-        .instructions {
+        .debug {
             margin-top: 20px;
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            color: #555;
+            padding: 10px;
+            background: #f0f0f0;
+            border-radius: 5px;
             font-size: 0.9em;
-            line-height: 1.6;
-        }
-
-        .instructions h3 {
             color: #333;
-            margin-bottom: 10px;
-        }
-
-        .instructions ul {
-            margin-left: 20px;
-        }
-
-        .instructions li {
-            margin-bottom: 5px;
-        }
-
-        .game-over {
-            text-align: center;
-            padding: 30px;
-            background: rgba(231, 76, 60, 0.1);
-            border-radius: 10px;
-            margin-bottom: 20px;
-            display: none;
-        }
-
-        .game-over.show {
-            display: block;
-        }
-
-        .game-over h2 {
-            color: #e74c3c;
-            margin-bottom: 10px;
-        }
-
-        @keyframes popIn {
-            0% {
-                transform: scale(0);
-                opacity: 0;
-            }
-            50% {
-                transform: scale(1.1);
-            }
-            100% {
-                transform: scale(1);
-                opacity: 1;
-            }
-        }
-
-        .score-popup {
-            position: fixed;
-            color: #fff;
-            font-weight: bold;
-            font-size: 1.5em;
-            pointer-events: none;
-            animation: popIn 0.5s ease-out;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
     </style>
 </head>
 <body>
     <div class="game-container">
-        <h1>🎨 Color Block</h1>
-        <p class="subtitle">点击相同颜色的方块进行消除</p>
-
+        <h1>🎨 Color Block - 测试版</h1>
+        
         <div class="score-board">
             <div class="score-item">
                 <div class="score-label">当前分数</div>
@@ -192,43 +101,44 @@
             </div>
         </div>
 
-        <div class="game-over" id="gameOver">
-            <h2>🎮 游戏结束！</h2>
-            <p>没有更多可消除的方块了</p>
-        </div>
-
         <canvas id="gameCanvas" width="480" height="480"></canvas>
 
-        <div class="button-container">
-            <button onclick="game.restart()">🔄 重新开始</button>
-        </div>
-
-        <div class="instructions">
-            <h3>📖 游戏说明</h3>
-            <ul>
-                <li>点击任意方块，所有相邻的同色方块将被消除</li>
-                <li>消除的方块越多，得分越高（分数 = 方块数² × 10）</li>
-                <li>方块消除后，上方方块会下落，顶部会生成新方块</li>
-                <li>当没有可消除的方块时，游戏结束</li>
-                <li>挑战你的最高分！</li>
-            </ul>
-        </div>
+        <button id="restartBtn">🔄 重新开始</button>
+        
+        <div class="debug" id="debug">点击Canvas测试...</div>
     </div>
 
     <script>
+        // 调试信息函数
+        function debug(msg) {
+            const debugDiv = document.getElementById('debug');
+            debugDiv.innerHTML += '<br>' + msg;
+            console.log(msg);
+        }
+
+        debug('脚本开始加载...');
+
         class ColorBlockGame {
             constructor() {
+                debug('游戏初始化...');
+                
                 this.canvas = document.getElementById('gameCanvas');
+                if (!this.canvas) {
+                    debug('错误：找不到Canvas元素！');
+                    return;
+                }
+                
                 this.ctx = this.canvas.getContext('2d');
+                if (!this.ctx) {
+                    debug('错误：无法获取Canvas上下文！');
+                    return;
+                }
+                
+                debug('Canvas初始化成功');
+                
                 this.gridSize = 8;
                 this.blockSize = 60;
-                this.colors = [
-                    '#FF6B6B', // 红色
-                    '#4ECDC4', // 青色
-                    '#45B7D1', // 蓝色
-                    '#FFA07A', // 橙色
-                    '#98D8C8', // 绿色
-                ];
+                this.colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8'];
                 this.grid = [];
                 this.score = 0;
                 this.highScore = localStorage.getItem('colorBlockHighScore') || 0;
@@ -237,9 +147,12 @@
 
                 this.init();
                 this.setupEventListeners();
+                
+                debug('游戏初始化完成！可以开始玩了');
             }
 
             init() {
+                debug('初始化游戏网格...');
                 this.grid = [];
                 for (let row = 0; row < this.gridSize; row++) {
                     this.grid[row] = [];
@@ -251,7 +164,7 @@
                 this.isGameOver = false;
                 this.updateScore();
                 this.draw();
-                document.getElementById('gameOver').classList.remove('show');
+                debug('网格初始化完成，已绘制');
             }
 
             getRandomColor() {
@@ -259,8 +172,14 @@
             }
 
             setupEventListeners() {
+                debug('设置事件监听器...');
+                
                 this.canvas.addEventListener('click', (e) => {
-                    if (this.animating || this.isGameOver) return;
+                    debug('Canvas被点击！');
+                    if (this.animating || this.isGameOver) {
+                        debug('游戏正在动画中或已结束，忽略点击');
+                        return;
+                    }
 
                     const rect = this.canvas.getBoundingClientRect();
                     const x = e.clientX - rect.left;
@@ -268,6 +187,7 @@
                     const col = Math.floor(x / this.blockSize);
                     const row = Math.floor(y / this.blockSize);
 
+                    debug(`点击位置：行${row}, 列${col}`);
                     this.handleClick(row, col);
                 });
 
@@ -283,31 +203,35 @@
                     this.highlightedCell = { row, col };
                     this.draw();
                 });
-
-                this.canvas.addEventListener('mouseleave', () => {
-                    this.highlightedCell = null;
-                    this.draw();
-                });
+                
+                debug('事件监听器设置完成');
             }
 
             handleClick(row, col) {
-                if (row < 0 || row >= this.gridSize || col < 0 || col >= this.gridSize) return;
+                if (row < 0 || row >= this.gridSize || col < 0 || col >= this.gridSize) {
+                    debug('点击位置超出范围');
+                    return;
+                }
 
                 const color = this.grid[row][col];
-                if (!color) return;
+                if (!color) {
+                    debug('点击位置没有方块');
+                    return;
+                }
 
                 const connectedBlocks = this.findConnectedBlocks(row, col, color);
+                debug(`找到${connectedBlocks.length}个连接的方块`);
 
-                if (connectedBlocks.length <= 1) return;
+                if (connectedBlocks.length <= 1) {
+                    debug('只有1个方块，无法消除');
+                    return;
+                }
 
                 // 计算分数
                 const points = connectedBlocks.length * connectedBlocks.length * 10;
                 this.score += points;
                 this.updateScore();
-
-                // 显示分数弹出
-                this.showScorePopup(points, col * this.blockSize + this.blockSize / 2,
-                                    row * this.blockSize + this.blockSize / 2);
+                debug(`消除${connectedBlocks.length}个方块，获得${points}分！`);
 
                 // 移除方块
                 connectedBlocks.forEach(([r, c]) => {
@@ -339,7 +263,6 @@
                 visited.add(key);
                 let blocks = [[row, col]];
 
-                // 检查四个方向
                 blocks = blocks.concat(this.findConnectedBlocks(row - 1, col, color, visited));
                 blocks = blocks.concat(this.findConnectedBlocks(row + 1, col, color, visited));
                 blocks = blocks.concat(this.findConnectedBlocks(row, col - 1, color, visited));
@@ -388,34 +311,14 @@
 
             endGame() {
                 this.isGameOver = true;
-                document.getElementById('gameOver').classList.add('show');
+                debug('游戏结束！');
                 if (this.score > this.highScore) {
                     this.highScore = this.score;
                     localStorage.setItem('colorBlockHighScore', this.highScore);
                     this.updateScore();
+                    debug('新纪录！');
                 }
-            }
-
-            showScorePopup(points, x, y) {
-                const popup = document.createElement('div');
-                popup.className = 'score-popup';
-                popup.textContent = `+${points}`;
-
-                const rect = this.canvas.getBoundingClientRect();
-                popup.style.left = (rect.left + x) + 'px';
-                popup.style.top = (rect.top + y) + 'px';
-
-                document.body.appendChild(popup);
-
-                setTimeout(() => {
-                    popup.style.transition = 'all 1s ease-out';
-                    popup.style.transform = 'translateY(-50px)';
-                    popup.style.opacity = '0';
-                }, 100);
-
-                setTimeout(() => {
-                    document.body.removeChild(popup);
-                }, 1100);
+                alert('游戏结束！没有更多可消除的方块了。\n你的得分：' + this.score);
             }
 
             updateScore() {
@@ -424,10 +327,8 @@
             }
 
             draw() {
-                // 清空画布
                 this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-                // 绘制方块
                 for (let row = 0; row < this.gridSize; row++) {
                     for (let col = 0; col < this.gridSize; col++) {
                         const x = col * this.blockSize;
@@ -435,24 +336,20 @@
                         const color = this.grid[row][col];
 
                         if (color) {
-                            // 绘制方块
                             this.ctx.fillStyle = color;
                             this.ctx.fillRect(x + 2, y + 2, this.blockSize - 4, this.blockSize - 4);
 
-                            // 添加高光效果
                             const gradient = this.ctx.createLinearGradient(x, y, x, y + this.blockSize);
                             gradient.addColorStop(0, 'rgba(255, 255, 255, 0.3)');
                             gradient.addColorStop(1, 'rgba(0, 0, 0, 0.1)');
                             this.ctx.fillStyle = gradient;
                             this.ctx.fillRect(x + 2, y + 2, this.blockSize - 4, this.blockSize - 4);
 
-                            // 绘制边框
                             this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
                             this.ctx.lineWidth = 2;
                             this.ctx.strokeRect(x + 2, y + 2, this.blockSize - 4, this.blockSize - 4);
                         }
 
-                        // 高亮显示
                         if (this.highlightedCell &&
                             this.highlightedCell.row === row &&
                             this.highlightedCell.col === col &&
@@ -473,16 +370,24 @@
             }
 
             restart() {
+                debug('重新开始游戏');
                 this.init();
             }
         }
 
         // 启动游戏
+        debug('准备创建游戏实例...');
         let game;
-
-        // 等待DOM加载完成后再初始化游戏
+        
         window.addEventListener('DOMContentLoaded', () => {
+            debug('页面DOM加载完成');
             game = new ColorBlockGame();
+            
+            // 绑定重启按钮
+            document.getElementById('restartBtn').addEventListener('click', () => {
+                debug('重启按钮被点击');
+                game.restart();
+            });
         });
     </script>
 </body>
