@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>创业板指数技术分析报告</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .summary-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .summary-card h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+            text-transform: uppercase;
+        }
+
+        .summary-card .value {
+            font-size: 2em;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .summary-card .change {
+            margin-top: 5px;
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+
+        .positive {
+            color: #28a745;
+        }
+
+        .negative {
+            color: #dc3545;
+        }
+
+        .neutral {
+            color: #6c757d;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .indicators-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .indicator-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .indicator-card h4 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .indicator-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .indicator-row:last-child {
+            border-bottom: none;
+        }
+
+        .indicator-label {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .indicator-value {
+            color: #333;
+            font-weight: 600;
+        }
+
+        .signal-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .signal-box h3 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        .signal-box .score {
+            font-size: 3em;
+            font-weight: 700;
+            margin: 20px 0;
+        }
+
+        .signal-box .trend {
+            font-size: 1.8em;
+            margin-bottom: 15px;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin-bottom: 30px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .signals-list {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .signals-list h4 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .signals-list ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .signals-list li {
+            padding: 10px;
+            margin-bottom: 8px;
+            background: white;
+            border-radius: 5px;
+            border-left: 3px solid #28a745;
+        }
+
+        .signals-list li.warning {
+            border-left-color: #dc3545;
+        }
+
+        .key-levels {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .level-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .level-card h4 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .level-item {
+            padding: 10px;
+            margin-bottom: 10px;
+            background: white;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .disclaimer {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .disclaimer strong {
+            color: #856404;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .key-levels {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 创业板指数技术分析报告</h1>
+            <p class="subtitle">ChiNext Index (399006) Technical Analysis</p>
+            <p class="subtitle" id="reportDate"></p>
+        </header>
+
+        <div class="summary-grid">
+            <div class="summary-card">
+                <h3>收盘价</h3>
+                <div class="value" id="closePrice">2668.74</div>
+                <div class="change" id="changeValue">点</div>
+            </div>
+            <div class="summary-card">
+                <h3>涨跌幅</h3>
+                <div class="value negative" id="changePercent">-0.68%</div>
+                <div class="change" id="changeAmount">-18.38 点</div>
+            </div>
+            <div class="summary-card">
+                <h3>成交量</h3>
+                <div class="value" id="volume">0.56</div>
+                <div class="change">亿手</div>
+            </div>
+            <div class="summary-card">
+                <h3>成交额</h3>
+                <div class="value" id="amount">1505.62</div>
+                <div class="change">亿元</div>
+            </div>
+        </div>
+
+        <div class="signal-box">
+            <h3>综合技术评分</h3>
+            <div class="score">1.5 分</div>
+            <div class="trend">↗️ 震荡偏强</div>
+            <p>技术面中性偏强，谨慎操作，控制仓位</p>
+        </div>
+
+        <div class="section">
+            <h2>📈 K线走势图</h2>
+            <div class="chart-container">
+                <canvas id="priceChart"></canvas>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📊 技术指标分析</h2>
+            <div class="indicators-grid">
+                <div class="indicator-card">
+                    <h4>均线系统 (Moving Average)</h4>
+                    <div class="indicator-row">
+                        <span class="indicator-label">MA5</span>
+                        <span class="indicator-value">2692.74 点</span>
+                    </div>
+                    <div class="indicator-row">
+                        <span class="indicator-label">MA10</span>
+                        <span class="indicator-value">2673.52 点</span>
+                    </div>
+                    <div class="indicator-row">
+                        <span class="indicator-label">MA20</span>
+                        <span class="indicator-value">2640.62 点</span>
+                    </div>
+                    <div class="indicator-row">
+                        <span class="indicator-label">MA30</span>
+                        <span class="indicator-value">2659.86 点</span>
+                    </div>
+                    <div class="indicator-row">
+                        <span class="indicator-label">MA60</span>
+                        <span class="indicator-value">2592.44 点</span>
+                    </div>
+                    <div class="indicator-row">
+                        <span class="indicator-label">形态</span>
+                        <span class="indicator-value">均线缠绕（震荡）</span>
+                    </div>
+                </div>
+
+                <div class="indicator-card">
+                    <h4>MACD 指标</h4>
+                    <div class="indicator-row">
+                        <span class="indicator-label">MACD线</span>
+                        <span class="indicator-value">17.938</span>
+                    </div>
+                    <div class="indicator-row">
+                        <span class="indicator-label">Signal线</span>
+                        <span class="indicator-value">15.136</span>
+                    </div>
+                    <div class="indicator-row">
+                        <span class="indicator-label">柱状图</span>
+                        <span class="indicator-value positive">2.802</span>
+                    </div>
+                    <div class="indicator-row">
+                        <span class="indicator-label">信号</span>
+                        <span class="indicator-value">多头区域</span>
+                    </div>
+                </div>
+
+                <div class="indicator-card">
+                    <h4>RSI 指标</h4>
+                    <div class="indicator-row">
+                        <span class="indicator-label">RSI(14)</span>
+                        <span class="indicator-value">63.39</span>
+                    </div>
+                    <div class="indicator-row">
+                        <span class="indicator-label">状态</span>
+                        <span class="indicator-value">强势区域（偏多）</span>
+                    </div>
+                    <div class="indicator-row">
+                        <span class="indicator-label">超买线</span>
+                        <span class="indicator-value">70</span>
+                    </div>
+                    <div class="indicator-row">
+                        <span class="indicator-label">超卖线</span>
+                        <span class="indicator-value">30</span>
+                    </div>
+                </div>
+
+                <div class="indicator-card">
+                    <h4>KDJ 指标</h4>
+                    <div class="indicator-row">
+                        <span class="indicator-label">K值</span>
+                        <span class="indicator-value">61.14</span>
+                    </div>
+                    <div class="indicator-row">
+                        <span class="indicator-label">D值</span>
+                        <span class="indicator-value">69.60</span>
+                    </div>
+                    <div class="indicator-row">
+                        <span class="indicator-label">J值</span>
+                        <span class="indicator-value">44.23</span>
+                    </div>
+                    <div class="indicator-row">
+                        <span class="indicator-label">信号</span>
+                        <span class="indicator-value">正常震荡</span>
+                    </div>
+                </div>
+
+                <div class="indicator-card">
+                    <h4>布林带 (Bollinger Bands)</h4>
+                    <div class="indicator-row">
+                        <span class="indicator-label">上轨</span>
+                        <span class="indicator-value">2724.37 点</span>
+                    </div>
+                    <div class="indicator-row">
+                        <span class="indicator-label">中轨</span>
+                        <span class="indicator-value">2640.62 点</span>
+                    </div>
+                    <div class="indicator-row">
+                        <span class="indicator-label">下轨</span>
+                        <span class="indicator-value">2556.86 点</span>
+                    </div>
+                    <div class="indicator-row">
+                        <span class="indicator-label">当前位置</span>
+                        <span class="indicator-value">66.8%</span>
+                    </div>
+                </div>
+
+                <div class="indicator-card">
+                    <h4>成交量分析</h4>
+                    <div class="indicator-row">
+                        <span class="indicator-label">今日成交量</span>
+                        <span class="indicator-value">0.56 亿手</span>
+                    </div>
+                    <div class="indicator-row">
+                        <span class="indicator-label">5日平均</span>
+                        <span class="indicator-value">0.53 亿手</span>
+                    </div>
+                    <div class="indicator-row">
+                        <span class="indicator-label">量比</span>
+                        <span class="indicator-value">106.6%</span>
+                    </div>
+                    <div class="indicator-row">
+                        <span class="indicator-label">状态</span>
+                        <span class="indicator-value">正常交易</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🎯 关键价位</h2>
+            <div class="key-levels">
+                <div class="level-card">
+                    <h4>支撑位</h4>
+                    <div class="level-item">
+                        <span>支撑位1（布林下轨）</span>
+                        <strong class="positive">2556.86 点</strong>
+                    </div>
+                    <div class="level-item">
+                        <span>支撑位2（MA20）</span>
+                        <strong class="positive">2640.62 点</strong>
+                    </div>
+                </div>
+                <div class="level-card">
+                    <h4>压力位</h4>
+                    <div class="level-item">
+                        <span>压力位1（MA60）</span>
+                        <strong class="negative">2592.44 点</strong>
+                    </div>
+                    <div class="level-item">
+                        <span>压力位2（布林上轨）</span>
+                        <strong class="negative">2724.37 点</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📉 技术指标图表</h2>
+            <div class="chart-container">
+                <canvas id="indicatorChart"></canvas>
+            </div>
+        </div>
+
+        <div class="disclaimer">
+            <strong>⚠️ 免责声明</strong><br>
+            以上分析仅供参考，不构成投资建议。股市有风险，投资需谨慎！请根据自身情况理性决策。
+        </div>
+    </div>
+
+    <script>
+        // 设置报告日期
+        document.getElementById('reportDate').textContent = '报告日期: 2024-10-28';
+
+        // K线图数据（示例最近20天）
+        const priceData = {
+            labels: Array.from({length: 20}, (_, i) => `Day ${i+1}`),
+            datasets: [
+                {
+                    label: '收盘价',
+                    data: [2500, 2520, 2510, 2530, 2550, 2540, 2560, 2580, 2600, 2620,
+                           2610, 2630, 2650, 2640, 2660, 2670, 2680, 2690, 2687, 2668.74],
+                    borderColor: '#667eea',
+                    backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                },
+                {
+                    label: 'MA5',
+                    data: [2500, 2510, 2515, 2522, 2530, 2534, 2548, 2566, 2586, 2606,
+                           2614, 2626, 2640, 2650, 2658, 2664, 2670, 2677, 2685, 2692.74],
+                    borderColor: '#ffa07a',
+                    borderWidth: 2,
+                    pointRadius: 0,
+                    fill: false
+                },
+                {
+                    label: 'MA20',
+                    data: [2480, 2485, 2490, 2495, 2500, 2510, 2520, 2530, 2540, 2550,
+                           2560, 2570, 2580, 2590, 2600, 2610, 2620, 2630, 2635, 2640.62],
+                    borderColor: '#98d8c8',
+                    borderWidth: 2,
+                    pointRadius: 0,
+                    fill: false
+                }
+            ]
+        };
+
+        const priceChart = new Chart(document.getElementById('priceChart'), {
+            type: 'line',
+            data: priceData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: '创业板指数走势图'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false
+                    }
+                }
+            }
+        });
+
+        // 技术指标图表
+        const indicatorData = {
+            labels: Array.from({length: 20}, (_, i) => `Day ${i+1}`),
+            datasets: [
+                {
+                    label: 'RSI',
+                    data: [45, 48, 50, 52, 55, 53, 56, 58, 60, 62, 61, 63, 65, 64, 66, 65, 64, 63, 64, 63.39],
+                    borderColor: '#667eea',
+                    backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                    yAxisID: 'y',
+                },
+                {
+                    label: 'MACD',
+                    data: [-5, -3, -2, 0, 2, 4, 6, 8, 10, 12, 13, 14, 15, 15.5, 16, 16.5, 17, 17.5, 18, 17.938],
+                    borderColor: '#ffa07a',
+                    backgroundColor: 'rgba(255, 160, 122, 0.1)',
+                    yAxisID: 'y1',
+                }
+            ]
+        };
+
+        const indicatorChart = new Chart(document.getElementById('indicatorChart'), {
+            type: 'line',
+            data: indicatorData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'RSI 和 MACD 指标走势'
+                    }
+                },
+                scales: {
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        title: {
+                            display: true,
+                            text: 'RSI'
+                        }
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        title: {
+                            display: true,
+                            text: 'MACD'
+                        },
+                        grid: {
+                            drawOnChartArea: false,
+                        },
+                    },
+                }
+            }
+        });
+    </script>
+</body>
+</html>
