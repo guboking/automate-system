@@ -1,0 +1,242 @@
+{
+  "total_subsectors": 12,
+  "summary": "科技板块最热门的三大细分领域：人工智能/AI, 半导体/芯片, 云计算",
+  "subsector_rankings": [
+    {
+      "subsector": "人工智能/AI",
+      "data": {
+        "score": 87.33,
+        "frequency": 780,
+        "coverage": 13,
+        "sentiment": 0.16,
+        "keywords": [
+          "GPT",
+          "智能算力",
+          "ChatGPT",
+          "算力",
+          "AIGC",
+          "AI",
+          "人工智能",
+          "大模型",
+          "智能化",
+          "算法",
+          "AI应用"
+        ],
+        "stocks": [
+          "科大讯飞(002230)",
+          "海光信息(688041)",
+          "寒武纪(688256)"
+        ]
+      }
+    },
+    {
+      "subsector": "半导体/芯片",
+      "data": {
+        "score": 82.14,
+        "frequency": 669,
+        "coverage": 13,
+        "sentiment": 0.19,
+        "keywords": [
+          "存储芯片",
+          "芯片设计",
+          "CPU",
+          "光刻机",
+          "国产替代",
+          "MCU",
+          "功率半导体",
+          "芯片",
+          "晶圆制造",
+          "台积电",
+          "GPU",
+          "晶圆",
+          "集成电路",
+          "半导体"
+        ],
+        "stocks": [
+          "长电科技(600584)",
+          "华虹公司(688347)",
+          "兆易创新(603986)",
+          "中芯国际(688981)",
+          "北方华创(002371)"
+        ]
+      }
+    },
+    {
+      "subsector": "云计算",
+      "data": {
+        "score": 49.66,
+        "frequency": 251,
+        "coverage": 9,
+        "sentiment": 0.07,
+        "keywords": [
+          "数据中心",
+          "SaaS",
+          "IDC",
+          "云计算",
+          "服务器",
+          "边缘计算",
+          "云服务",
+          "云基础设施",
+          "算力中心"
+        ],
+        "stocks": [
+          "中科曙光(603019)",
+          "浪潮信息(000977)",
+          "宝信软件(600845)"
+        ]
+      }
+    },
+    {
+      "subsector": "软件",
+      "data": {
+        "score": 49.13,
+        "frequency": 97,
+        "coverage": 12,
+        "sentiment": 0.1,
+        "keywords": [
+          "软件",
+          "数据库",
+          "信创"
+        ],
+        "stocks": [
+          "恒生电子(600570)"
+        ]
+      }
+    },
+    {
+      "subsector": "5G/通信",
+      "data": {
+        "score": 47.89,
+        "frequency": 101,
+        "coverage": 11,
+        "sentiment": 0.16,
+        "keywords": [
+          "IoT",
+          "通信设备",
+          "光模块",
+          "光纤",
+          "5G",
+          "光通信",
+          "基站",
+          "通信"
+        ],
+        "stocks": [
+          "中际旭创(300308)",
+          "中兴通讯(000063)",
+          "新易盛(300502)"
+        ]
+      }
+    },
+    {
+      "subsector": "信创/国产化",
+      "data": {
+        "score": 47.12,
+        "frequency": 51,
+        "coverage": 11,
+        "sentiment": 0.28,
+        "keywords": [
+          "国产替代",
+          "国产化",
+          "自主可控",
+          "信创"
+        ],
+        "stocks": []
+      }
+    },
+    {
+      "subsector": "消费电子",
+      "data": {
+        "score": 46.36,
+        "frequency": 66,
+        "coverage": 11,
+        "sentiment": 0.17,
+        "keywords": [
+          "消费电子",
+          "AR",
+          "智能手机"
+        ],
+        "stocks": [
+          "歌尔股份(002241)",
+          "TCL科技(000100)",
+          "立讯精密(002475)"
+        ]
+      }
+    },
+    {
+      "subsector": "大数据",
+      "data": {
+        "score": 30.88,
+        "frequency": 13,
+        "coverage": 6,
+        "sentiment": 0.09,
+        "keywords": [
+          "大数据",
+          "BI",
+          "数据分析"
+        ],
+        "stocks": []
+      }
+    },
+    {
+      "subsector": "卫星互联网",
+      "data": {
+        "score": 29.69,
+        "frequency": 9,
+        "coverage": 4,
+        "sentiment": 0.33,
+        "keywords": [
+          "卫星互联网",
+          "卫星通信",
+          "导航"
+        ],
+        "stocks": []
+      }
+    },
+    {
+      "subsector": "工业互联网",
+      "data": {
+        "score": 27.46,
+        "frequency": 3,
+        "coverage": 1,
+        "sentiment": 0.67,
+        "keywords": [
+          "智能制造",
+          "工业互联网"
+        ],
+        "stocks": []
+      }
+    },
+    {
+      "subsector": "量子计算",
+      "data": {
+        "score": 22.38,
+        "frequency": 9,
+        "coverage": 3,
+        "sentiment": 0.0,
+        "keywords": [
+          "量子科技",
+          "量子计算",
+          "量子通信"
+        ],
+        "stocks": []
+      }
+    },
+    {
+      "subsector": "网络安全",
+      "data": {
+        "score": 19.87,
+        "frequency": 5,
+        "coverage": 2,
+        "sentiment": 0.0,
+        "keywords": [
+          "密码",
+          "网络安全"
+        ],
+        "stocks": [
+          "深信服(300454)",
+          "启明星辰(002439)"
+        ]
+      }
+    }
+  ]
+}
