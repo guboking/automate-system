@@ -1,0 +1,28 @@
+{
+  "symbol": "1211.HK",
+  "name": "比亚迪股份",
+  "market": "港股",
+  "updated_at": "2025-12-07T14:00:00Z",
+  "price": {
+    "current": 99.15,
+    "currency": "HKD",
+    "change": "+0.76%",
+    "range_52w": [81.80, 159.27]
+  },
+  "analyst": {
+    "target_price_avg": 132.14,
+    "target_price_high": 174.29,
+    "target_price_low": 90.11,
+    "buy_ratings": 24,
+    "sell_ratings": 2,
+    "upside": "31.22%"
+  },
+  "technical": {
+    "short_term_ma": "买入信号",
+    "long_term_ma": "卖出信号",
+    "support": 97.83,
+    "resistance": 100.27,
+    "outlook_3m": "-11.89%",
+    "price_range_3m": [79.99, 91.82]
+  }
+}
