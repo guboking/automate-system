@@ -2,7 +2,7 @@
 
 ## 1. 数据获取流程
 
-1. **先查本地缓存** `/Users/a123/stock_cache/data/`
+1. **先查本地缓存** `./stock_cache/data/`
 2. **缓存有效性检查**：
    - 价格数据：24小时
    - 公司信息：7天
@@ -33,7 +33,7 @@
 ## 4. 缓存目录结构
 
 ```
-/Users/a123/stock_cache/
+./stock_cache/
 ├── cache_index.json      # 缓存索引，记录各数据的更新时间
 ├── data/{symbol}.json    # 各股票的缓存数据
 └── reports/              # 生成的分析报告
