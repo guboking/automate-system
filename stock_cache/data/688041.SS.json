@@ -1,0 +1,48 @@
+{
+  "symbol": "688041.SS",
+  "name": "海光信息",
+  "market": "A股科创板",
+  "updated_at": "2025-12-07T15:00:00Z",
+  "price": {
+    "current": 210.14,
+    "prev_close": 212.58,
+    "change_pct": "-1.15%",
+    "range_day": null,
+    "range_52w": null,
+    "volume": "13.4万手",
+    "turnover": "28.37亿元",
+    "turnover_rate": "0.58%"
+  },
+  "fundamentals": {
+    "revenue_ytd": "94.9亿元",
+    "revenue_growth": "+54.65%",
+    "net_profit_ytd": "19.61亿元",
+    "profit_growth": "+28.56%",
+    "gross_margin": "60.1%",
+    "pe_ratio": null,
+    "pb_ratio": null
+  },
+  "analyst": {
+    "target_price_avg": 254.62,
+    "target_price_high": null,
+    "target_price_low": null,
+    "buy_ratings": 20,
+    "hold_ratings": 4,
+    "sell_ratings": 0,
+    "upside": "+21.17%"
+  },
+  "capital_flow": {
+    "date": "2025-12-03",
+    "main_net": "-1.88亿元",
+    "retail_net": "-613.68万元",
+    "hot_money_net": "+1.95亿元"
+  },
+  "technical": {
+    "ma5": null,
+    "ma20": null,
+    "support": null,
+    "resistance": null,
+    "signal": null
+  },
+  "news": []
+}
