@@ -1,0 +1,32 @@
+{
+  "symbol": "002594.SZ",
+  "name": "比亚迪",
+  "market": "A股深市",
+  "updated_at": "2025-12-07T14:00:00Z",
+  "price": {
+    "current": 95.98,
+    "prev_close": 95.24,
+    "range_day": [94.71, 96.22],
+    "range_52w": [87.40, 138.99]
+  },
+  "fundamentals": {
+    "revenue_ytd": "5662.66亿元",
+    "revenue_growth": "12.75%",
+    "net_profit_ytd": "233.33亿元",
+    "profit_growth": "-7.55%",
+    "gross_margin": "17.87%"
+  },
+  "analyst": {
+    "target_price_avg": 129.78,
+    "target_price_high": 167,
+    "target_price_low": 92,
+    "buy_ratings": 28,
+    "sell_ratings": 2,
+    "upside": "35.22%"
+  },
+  "capital_flow": {
+    "date": "2025-12-02",
+    "main_inflow": "3.44亿元",
+    "retail_outflow": "2.31亿元"
+  }
+}
