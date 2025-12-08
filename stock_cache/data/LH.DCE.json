@@ -1,0 +1,88 @@
+{
+  "symbol": "LH.DCE",
+  "name": "生猪期货",
+  "market": "大连商品交易所",
+  "updated_at": "2025-12-08T10:00:00Z",
+
+  "contracts": {
+    "LH2501": {
+      "name": "生猪2501",
+      "delivery": "2025年1月",
+      "current": 14620,
+      "prev_close": 14655,
+      "change_pct": "-0.24%",
+      "range_week": [14620, 15085],
+      "volume": "158683手",
+      "open_interest": "62774手",
+      "weekly_change": "-3.02%"
+    },
+    "LH2503": {
+      "name": "生猪2503",
+      "delivery": "2025年3月",
+      "current": 12815,
+      "prev_close": 12850,
+      "change_pct": "-0.27%",
+      "range_day": [12720, 12865],
+      "volume": null,
+      "open_interest": "80800手"
+    }
+  },
+
+  "contract_spec": {
+    "trading_unit": "16吨/手",
+    "quote_unit": "元/吨",
+    "min_tick": 5,
+    "limit_up_down": "4%",
+    "months": [1, 3, 5, 7, 9, 11],
+    "trading_hours": "09:00-11:30, 13:30-15:00",
+    "min_margin": "5%",
+    "delivery": "实物交割"
+  },
+
+  "fundamentals": {
+    "sow_inventory_trend": "2025年1-2月减少，3月起转增",
+    "hog_supply_trend": "2025年Q1出栏量逐月增加",
+    "demand_outlook": "12月-1月旺季需求增量明显",
+    "cost_trend": "饲料成本回落，养殖成本降低",
+    "spot_price_ref": "约15500-16000元/吨"
+  },
+
+  "technical": {
+    "LH2501": {
+      "support": 14500,
+      "resistance": 15000,
+      "trend": "震荡偏弱",
+      "signal": "观望",
+      "range": "15000-16000区间低位震荡"
+    },
+    "LH2503": {
+      "support": 12500,
+      "resistance": 13000,
+      "trend": "承压弱势",
+      "signal": "逢高沽空",
+      "range": "13000-14500"
+    }
+  },
+
+  "capital_flow": {
+    "LH2501_weekly_position_change": "-13129手",
+    "sentiment": "空头主导，散户入场后流动性下降"
+  },
+
+  "outlook": {
+    "short_term": "供需博弈加剧，阶段性偏弱",
+    "medium_term": "节前旺季或有反弹，节后承压",
+    "2025_forecast": "价格重心低于2024年，高于2023年"
+  },
+
+  "news": [
+    {
+      "date": "2024-12-31",
+      "title": "节后传统消费淡季，生猪价格或再次承压下跌"
+    },
+    {
+      "date": "2024-12-04",
+      "title": "生猪消费端或逐渐好转，价格或难持续大幅下跌"
+    }
+  ]
+}
