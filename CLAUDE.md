@@ -65,21 +65,16 @@ def is_expired(updated_at, data_type):
   "price": {
     "current": 95.98,
     "prev_close": 95.24,
-    "change_pct": "+0.78%",
     "range_day": [94.71, 96.22],
-    "range_52w": [87.40, 138.99],
-    "volume": "35.92万手",
-    "turnover": "34.84亿元"
+    "range_52w": [87.40, 138.99]
   },
 
   "fundamentals": {
     "revenue_ytd": "5662.66亿元",
-    "revenue_growth": "+12.75%",
+    "revenue_growth": "12.75%",
     "net_profit_ytd": "233.33亿元",
     "profit_growth": "-7.55%",
-    "gross_margin": "17.87%",
-    "pe_ratio": null,
-    "pb_ratio": null
+    "gross_margin": "17.87%"
   },
 
   "analyst": {
@@ -87,37 +82,29 @@ def is_expired(updated_at, data_type):
     "target_price_high": 167,
     "target_price_low": 92,
     "buy_ratings": 28,
-    "hold_ratings": 0,
     "sell_ratings": 2,
-    "upside": "+35.22%"
+    "upside": "35.22%"
   },
 
   "capital_flow": {
-    "main_net": "+3.44亿元",
-    "retail_net": "-2.31亿元",
-    "north_net": null
-  },
-
-  "technical": {
-    "ma5": null,
-    "ma20": null,
-    "support": null,
-    "resistance": null,
-    "signal": null
-  },
-
-  "news": []
+    "date": "2025-12-02",
+    "main_inflow": "3.44亿元",
+    "retail_outflow": "2.31亿元"
+  }
 }
 ```
+
+> **注**：`technical` 和 `news` 字段为可选扩展，按需获取。
 
 ### 3.2 股票代码格式
 
 | 市场 | 格式 | 示例 | 识别规则 |
 |------|------|------|----------|
-| A股沪市 | {6位}.SS | 603993.SS | 60/68开头 |
-| A股深市 | {6位}.SZ | 000001.SZ | 00/30/002开头 |
-| 港股 | {4-5位}.HK | 1211.HK | 纯数字 |
-| 美股 | {字母} | TSLA | 纯字母 |
+| A股沪市 | {6位}.SS | 603993.SS | 60/68 开头（主板/科创板） |
+| A股深市 | {6位}.SZ | 000001.SZ | 00/001/002/003 开头（主板/中小板） |
+| 创业板 | {6位}.SZ | 300750.SZ | 300/301 开头 |
+| 港股 | {4-5位}.HK | 1211.HK | 纯数字，1-5 位 |
+| 美股 | {字母} | TSLA | 纯字母，1-5 位 |
 
 ---
 
@@ -167,12 +154,33 @@ def is_expired(updated_at, data_type):
 
 ```
 ./stock_cache/
-├── cache_index.json          # 索引：记录每只股票的更新时间
+├── cache_index.json          # 索引文件
 ├── data/
 │   ├── {symbol}.json         # 单股数据文件
 │   └── ...
 └── reports/
-    └── {symbol}_{date}.md    # 分析报告存档
+    └── {symbol}_{date}.md    # 分析报告存档（可选）
+```
+
+### 6.1 索引文件结构
+
+```json
+{
+  "version": "1.0",
+  "created_at": "2025-12-07",
+  "cache_validity": {
+    "price": "24h",
+    "company_info": "7d",
+    "news": "6h"
+  },
+  "entries": {
+    "002594.SZ": {
+      "name": "比亚迪",
+      "updated_at": "2025-12-07T14:00:00Z",
+      "data_types": ["price", "fundamentals", "analyst", "capital_flow"]
+    }
+  }
+}
 ```
 
 ---
