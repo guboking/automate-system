@@ -185,3 +185,144 @@ def is_expired(updated_at, data_type):
 | 「刷新比亚迪数据」 | 强制获取最新数据 → 更新缓存 → 输出分析 |
 | 「比亚迪 vs 特斯拉」 | 分别获取两只股票 → 对比分析 |
 | 「最近分析过哪些股票」 | 读取 cache_index.json 列出 |
+
+---
+
+# Claude Code 速查指南 (v2.0.x)
+
+## 思考模式
+- `think` - 标准思考，一般复杂问题
+- `think harder` - 深度思考，架构设计
+- `ultrathink` - 极深思考，系统级设计
+- Tab键切换思考模式 | `/t` 前缀临时禁用
+
+## 计划模式
+- `Shift+Tab` (Mac) / `Alt+M` (Win) 进入
+- 流程：需求 → 制定计划 → 审查(拒绝/修改/批准) → 执行
+- `claude --model opus plan` 启动时指定Opus规划+Sonnet执行
+
+## 核心命令
+| 命令 | 功能 |
+|------|------|
+| `/rewind` | 回退到历史检查点，撤销代码更改 |
+| `/compact` | 手动压缩对话，释放上下文 |
+| `/resume` | 选择历史对话恢复 |
+| `/export` | 导出当前对话 |
+| `/tasks` | 查看后台任务 |
+| `/mcp` | 切换MCP服务器状态 |
+
+## 快捷键
+| 键 | 功能 |
+|----|------|
+| `Tab` | 文件补全/切换思考模式 |
+| `Shift+Tab` | 切换计划模式/自动接受 |
+| `Ctrl+B` | 后台运行命令 |
+| `Ctrl+R` | 历史命令搜索 |
+| `Ctrl+C` | 中断当前操作 |
+| `ESC` | 停止Claude工作 |
+
+## 配置文件位置
+```
+~/.claude/
+├── CLAUDE.md          # 全局指令
+├── settings.json      # 用户级设置
+├── commands/          # 全局自定义命令
+└── mcp.json           # 用户级MCP配置
+
+项目/.claude/
+├── settings.json      # 项目级设置
+├── commands/          # 项目级命令
+├── agents/            # 自定义代理
+└── .mcp.json          # 项目级MCP配置
+```
+
+## 自定义命令格式 (.claude/commands/*.md)
+```markdown
+---
+description: 命令描述
+model: opus|sonnet|haiku
+allowed-tools: Read, Grep, Bash
+argument-hint: <参数提示>
+---
+
+提示词内容，$ARGUMENTS 为用户参数
+```
+
+## 自定义代理格式 (.claude/agents/*.md)
+```markdown
+---
+description: 代理描述
+model: opus
+permissionMode: bypassPermissions
+disallowedTools: [Bash, Write]
+---
+
+角色定义和专业指令...
+```
+调用：`@代理名` 或让Claude自动选择
+
+## 钩子配置 (settings.json)
+```json
+{
+  "hooks": {
+    "SessionStart": [{"command": "脚本"}],
+    "PostToolUse": [{"matcher": "Write", "command": "脚本"}],
+    "PreToolUse": [{"matcher": "Bash", "command": "验证脚本"}]
+  }
+}
+```
+钩子类型：SessionStart/End, PreToolUse, PostToolUse, PermissionRequest, Stop
+
+环境变量：`$CLAUDE_PROJECT_DIR`, `$CLAUDE_FILE_PATH`, `$CLAUDE_TOOL_INPUT`, `$CLAUDE_TOOL_OUTPUT`
+
+## 权限规则 (settings.json)
+```json
+{
+  "permissions": {
+    "allow": ["Read", "Glob", "Bash(npm test:*)"],
+    "deny": ["Bash(rm -rf:*)", "Bash(sudo:*)", "Write(.env*)"],
+    "ask": ["Bash(npm install:*)", "Write(package.json)"]
+  }
+}
+```
+
+## MCP服务器配置 (.mcp.json)
+```json
+{
+  "mcpServers": {
+    "postgres": {
+      "command": "npx",
+      "args": ["-y", "@anthropic-ai/mcp-server-postgres"],
+      "env": {"DATABASE_URL": "${DATABASE_URL}"}
+    }
+  }
+}
+```
+命令：`claude mcp add` | `claude mcp list` | `claude mcp add-from-claude-desktop`
+
+## 模型选择策略
+- **Opus**: 架构设计、安全审计、复杂重构
+- **Sonnet**: 日常开发、代码审查、测试编写
+- **Haiku**: 文档生成、简单修复、Explore子代理探索
+
+## Explore子代理
+自动触发：询问项目结构、功能定位、API端点时
+手动指定："使用Explore代理快速了解src/services目录"
+深度：quick | medium | very thorough
+
+## 沙盒模式 (settings.json)
+```json
+{
+  "sandbox": {
+    "enabled": true,
+    "allowUnsandboxedCommands": false
+  }
+}
+```
+
+## 工作流建议
+1. 简单任务直接执行
+2. 复杂任务 → `Shift+Tab` 计划模式 + `ultrathink`
+3. 长命令 → `Ctrl+B` 后台运行
+4. 出错 → `/rewind` 回退
+5. 上下文满 → `/compact` 压缩
