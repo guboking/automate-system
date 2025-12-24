@@ -1,0 +1,2 @@
+# DeepSeek MCP Server dependencies
+httpx>=0.25.0
