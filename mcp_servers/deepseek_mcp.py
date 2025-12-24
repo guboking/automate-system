@@ -12,13 +12,34 @@ import os
 import sys
 import json
 import asyncio
+from pathlib import Path
 from typing import Any
 
 # MCP Protocol implementation using stdio
 import httpx
 
+
+def load_api_key() -> str:
+    """Load API key from environment or .env file."""
+    key = os.environ.get("DEEPSEEK_API_KEY", "")
+    if key:
+        return key
+
+    # Try loading from .env file in project root
+    env_paths = [
+        Path(__file__).parent.parent / ".env",  # project root
+        Path.home() / ".env",  # home directory
+    ]
+    for env_path in env_paths:
+        if env_path.exists():
+            for line in env_path.read_text().splitlines():
+                if line.startswith("DEEPSEEK_API_KEY="):
+                    return line.split("=", 1)[1].strip().strip('"\'')
+    return ""
+
+
 # Configuration
-DEEPSEEK_API_KEY = os.environ.get("DEEPSEEK_API_KEY", "")
+DEEPSEEK_API_KEY = load_api_key()
 DEEPSEEK_API_BASE = "https://api.deepseek.com/v1"
 
 # Available models
