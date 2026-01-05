@@ -1,0 +1,90 @@
+{
+  "module": "order_transition",
+  "updated_at": null,
+  "description": "国际秩序转换信号追踪",
+
+  "globalization_indicators": {
+    "world_trade_volume": {
+      "yoy_growth": null,
+      "trend": null
+    },
+    "fdi_flows": {
+      "global_total": null,
+      "trend": null
+    },
+    "supply_chain_reshoring": {
+      "us_manufacturing_return": null,
+      "friend_shoring_deals": null
+    },
+    "decoupling_index": {
+      "us_china_trade": null,
+      "tech_bifurcation": null
+    }
+  },
+
+  "institutional_signals": {
+    "un_effectiveness": {
+      "score": null,
+      "recent_vetoes": null
+    },
+    "wto_status": {
+      "dispute_mechanism": "瘫痪",
+      "new_trade_blocs": ["RCEP", "IPEF", "CPTPP"]
+    },
+    "bretton_woods_institutions": {
+      "imf_quota_reform": null,
+      "world_bank_lending_shift": null
+    }
+  },
+
+  "power_transition_metrics": {
+    "us_china_gdp_ratio": null,
+    "military_spending_comparison": null,
+    "tech_leadership_indicators": {
+      "ai_papers": null,
+      "semiconductor_capacity": null,
+      "patent_filings": null
+    }
+  },
+
+  "historical_cycles": {
+    "current_phase": null,
+    "reference_periods": [
+      {
+        "period": "1870-1914 第一轮全球化",
+        "end_trigger": "一战",
+        "parallel": "帝国竞争加剧"
+      },
+      {
+        "period": "1945-1971 布雷顿森林",
+        "end_trigger": "尼克松冲击",
+        "parallel": "霸权货币承压"
+      },
+      {
+        "period": "1980-2008 新自由主义",
+        "end_trigger": "金融危机",
+        "parallel": "金融过度化"
+      },
+      {
+        "period": "2008-? 后危机时代",
+        "end_trigger": "待定",
+        "parallel": "多极化+去全球化"
+      }
+    ]
+  },
+
+  "scenario_assessment": {
+    "gradual_transition": {
+      "probability": null,
+      "description": "渐进多极化，规则重塑"
+    },
+    "sharp_break": {
+      "probability": null,
+      "description": "重大冲突导致秩序断裂"
+    },
+    "new_equilibrium": {
+      "probability": null,
+      "description": "新共识形成，制度重建"
+    }
+  }
+}

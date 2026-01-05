@@ -1,0 +1,176 @@
+{
+  "title": "历史周期参考框架",
+  "description": "以史为鉴：国际秩序与经济体系演变规律",
+  "source": "基于用户提供的思维导图整理",
+  "created_at": "2026-01-05",
+
+  "epochs": [
+    {
+      "id": "ancient_wartime",
+      "name": "古代军事优先型经济",
+      "period": "公元3世纪（蜀汉为例）",
+      "core_logic": "三国竞争压力下的战时体制，吏卒人口占比约15%",
+      "economic_model": {
+        "production": "屯田制，军队高度自给",
+        "currency": {
+          "state_settlement": "布帛",
+          "civilian_circulation": "钱币（直百钱等名义货币）",
+          "mechanism": "双轨制回笼物资"
+        }
+      },
+      "lessons": [
+        "极端竞争环境下，经济服从于军事逻辑",
+        "货币可作为资源调配工具而非价值尺度",
+        "战时经济难以持续，终将耗尽"
+      ]
+    },
+    {
+      "id": "first_globalization",
+      "name": "维也纳体系与第一轮全球化",
+      "period": "1815-1914",
+      "core_logic": "欧洲协调下的'百年和平'，自由贸易→自由帝国主义",
+      "economic_model": {
+        "monetary_system": "金本位制",
+        "trade_structure": "中心-外围分工",
+        "hegemony": "英帝国主导"
+      },
+      "key_events": [
+        {
+          "name": "鸦片战争",
+          "year": "1839-1842",
+          "significance": "自由贸易权作为战争法理，商业利益与帝国权力耦合"
+        }
+      ],
+      "end_trigger": "一战爆发",
+      "lessons": [
+        "帝国竞争加剧最终导致秩序崩溃",
+        "金本位在战争压力下不可持续",
+        "全球化可以在短期内戛然而止"
+      ],
+      "market_parallel": "当帝国间竞争加剧时，避险资产价值重估"
+    },
+    {
+      "id": "interwar_chaos",
+      "name": "两次大战间的混乱",
+      "period": "1914-1945",
+      "core_logic": "旧秩序瓦解，新秩序尚未建立",
+      "economic_model": {
+        "monetary_chaos": "金本位反复尝试与失败",
+        "trade_collapse": "保护主义抬头",
+        "depression": "1929大萧条"
+      },
+      "lessons": [
+        "秩序真空期风险极高",
+        "货币战争与贸易战互相强化",
+        "经济危机可能引发政治极端化"
+      ]
+    },
+    {
+      "id": "bretton_woods",
+      "name": "布雷顿森林体系",
+      "period": "1945-1971",
+      "core_logic": "美国霸权下的制度化国际秩序",
+      "economic_model": {
+        "monetary_system": "美元-黄金挂钩，固定汇率",
+        "institutions": ["IMF", "世界银行", "GATT"],
+        "hegemony": "美国单极主导"
+      },
+      "end_trigger": "1971尼克松冲击，美元与黄金脱钩",
+      "lessons": [
+        "霸权货币最终难以承受特里芬难题",
+        "制度优势可维持数十年稳定",
+        "体系崩溃前往往有预警信号"
+      ],
+      "market_parallel": "当前美元体系与当年的相似压力：财政赤字、对外负债"
+    },
+    {
+      "id": "neoliberal_globalization",
+      "name": "新自由主义与第二轮全球化",
+      "period": "1980s-2008",
+      "core_logic": "华盛顿共识，私有化、市场化、减少政府干预",
+      "economic_model": {
+        "monetary_system": "浮动汇率，美元为锚",
+        "trade_structure": "全球价值链，发展中国家参与分工",
+        "finance": "金融自由化与资本全球流动"
+      },
+      "end_trigger": "2008金融危机",
+      "lessons": [
+        "金融过度化带来系统性风险",
+        "全球化利益分配不均引发反弹",
+        "危机往往在最意想不到处爆发"
+      ]
+    },
+    {
+      "id": "post_crisis",
+      "name": "后危机时代",
+      "period": "2008-2022",
+      "core_logic": "量化宽松、低利率、贫富分化加剧",
+      "economic_model": {
+        "monetary_policy": "非常规货币政策常态化",
+        "trade_tension": "中美贸易战开启脱钩",
+        "technology": "数字经济崛起"
+      },
+      "end_trigger": "2022俄乌战争 + 高通胀回归",
+      "lessons": [
+        "货币超发终有代价",
+        "地缘政治可以瞬间压倒经济逻辑",
+        "低波动时代已经结束"
+      ]
+    },
+    {
+      "id": "current_transition",
+      "name": "当代：秩序转换期",
+      "period": "2022-?",
+      "core_logic": "多极化加速，地缘政治成为核心变量",
+      "key_features": [
+        "地缘冲突成为市场核心外部冲击",
+        "黄金价值重估（美元信用褪色）",
+        "AI技术可能重塑生产率",
+        "供应链重构（友岸外包）"
+      ],
+      "open_questions": [
+        "AI能否带来生产率飞跃？",
+        "美元体系是渐进弱化还是突然断裂？",
+        "中美竞争走向何方？"
+      ],
+      "investment_implications": {
+        "if_ai_succeeds": "科技股 + 风险资产回归",
+        "if_ai_disappoints": "黄金牛市延续",
+        "if_conflict_escalates": "避险资产 + 防御板块"
+      }
+    }
+  ],
+
+  "meta_patterns": {
+    "globalization_cycles": {
+      "pattern": "建设-繁荣-危机-崩溃",
+      "typical_duration": "40-70年",
+      "current_position": "可能处于第二轮的晚期压力测试阶段"
+    },
+    "monetary_evolution": {
+      "pattern": "新锚建立→信用扩张→过度负债→信用危机→寻找新锚",
+      "current_anchor": "美元（无黄金背书）",
+      "stress_signals": ["财政赤字货币化", "央行购金潮", "去美元化尝试"]
+    },
+    "hegemonic_transition": {
+      "historical_examples": ["荷兰→英国", "英国→美国"],
+      "typical_features": ["贸易摩擦", "金融竞争", "技术争夺", "军备竞赛"],
+      "current_observation": "中美竞争呈现多项历史特征"
+    }
+  },
+
+  "practical_application": {
+    "when_to_reference": [
+      "市场出现重大地缘事件时",
+      "货币政策出现历史性转向时",
+      "讨论长期资产配置时",
+      "评估系统性风险时"
+    ],
+    "how_to_use": [
+      "识别当前阶段在历史周期中的位置",
+      "参考类似历史时期的市场表现",
+      "警惕历史规律的局限性——'这次不同'有时是真的"
+    ],
+    "caveat": "历史不会简单重复，只是押韵。具体时点和幅度无法预测。"
+  }
+}

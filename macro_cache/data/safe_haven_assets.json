@@ -1,0 +1,91 @@
+{
+  "module": "safe_haven_assets",
+  "updated_at": null,
+  "description": "避险资产追踪与配置建议",
+
+  "gold": {
+    "spot_price_usd": null,
+    "ytd_change": null,
+    "52w_range": [null, null],
+    "central_bank_demand": {
+      "ytd_tonnes": null,
+      "trend": "强劲"
+    },
+    "etf_holdings": {
+      "total_tonnes": null,
+      "flow_trend": null
+    },
+    "technical": {
+      "support": null,
+      "resistance": null,
+      "trend": null
+    },
+    "valuation_anchor": {
+      "status": "失锚",
+      "reason": "美元信用重估 + 央行持续购金",
+      "fair_value_model": "传统模型失效"
+    }
+  },
+
+  "us_treasuries": {
+    "10y_yield": null,
+    "2y_yield": null,
+    "yield_curve": null,
+    "foreign_holdings": {
+      "china": null,
+      "japan": null,
+      "trend": null
+    },
+    "risk_assessment": {
+      "default_risk": "极低但非零（债务上限政治）",
+      "inflation_risk": "中等",
+      "duration_risk": null
+    }
+  },
+
+  "other_safe_havens": {
+    "swiss_franc": {
+      "usd_chf": null,
+      "trend": null
+    },
+    "japanese_yen": {
+      "usd_jpy": null,
+      "trend": null,
+      "note": "利差因素压制避险属性"
+    },
+    "bitcoin": {
+      "price_usd": null,
+      "correlation_with_gold": null,
+      "institutional_adoption": null,
+      "note": "数字黄金叙事vs风险资产属性"
+    }
+  },
+
+  "allocation_framework": {
+    "scenario_low_risk": {
+      "description": "地缘平稳，经济复苏",
+      "gold": "5-10%",
+      "bonds": "20-30%",
+      "equities": "60-70%"
+    },
+    "scenario_medium_risk": {
+      "description": "区域冲突持续，通胀黏性",
+      "gold": "10-15%",
+      "bonds": "30-40%",
+      "equities": "45-55%"
+    },
+    "scenario_high_risk": {
+      "description": "秩序断裂，信用危机",
+      "gold": "20-30%",
+      "bonds": "30-40%（短久期）",
+      "equities": "30-40%",
+      "cash": "10-20%"
+    }
+  },
+
+  "current_recommendation": {
+    "scenario": null,
+    "rationale": null,
+    "action_items": []
+  }
+}

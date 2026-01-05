@@ -1,0 +1,70 @@
+{
+  "module": "geopolitical_risk",
+  "updated_at": null,
+  "description": "地缘政治风险追踪",
+
+  "risk_level": {
+    "current": null,
+    "scale": "1-10",
+    "trend": null,
+    "comment": "1=和平稳定, 5=区域紧张, 10=全面冲突"
+  },
+
+  "active_conflicts": [
+    {
+      "name": "俄乌冲突",
+      "region": "东欧",
+      "start_date": "2022-02",
+      "intensity": null,
+      "market_impact": {
+        "energy": "高",
+        "grains": "高",
+        "defense": "利好"
+      }
+    },
+    {
+      "name": "以哈冲突",
+      "region": "中东",
+      "start_date": "2023-10",
+      "intensity": null,
+      "market_impact": {
+        "oil": "中高",
+        "shipping": "红海航线受阻"
+      }
+    }
+  ],
+
+  "tension_zones": [
+    {
+      "region": "台海",
+      "parties": ["中国", "美国", "台湾"],
+      "tension_level": null,
+      "key_indicators": ["军演频率", "外交声明", "军售动态"]
+    },
+    {
+      "region": "南海",
+      "parties": ["中国", "菲律宾", "美国"],
+      "tension_level": null,
+      "key_indicators": ["岛礁对峙", "联合巡航"]
+    }
+  ],
+
+  "sanctions_tracker": {
+    "russia_sanctions": {
+      "status": "持续加码",
+      "latest_update": null,
+      "impact_sectors": ["能源", "金融", "科技"]
+    },
+    "china_tech_restrictions": {
+      "status": "逐步收紧",
+      "latest_update": null,
+      "impact_sectors": ["半导体", "AI", "量子计算"]
+    }
+  },
+
+  "sentiment_indicators": {
+    "news_sentiment_score": null,
+    "vix_level": null,
+    "gold_safe_haven_flow": null
+  }
+}

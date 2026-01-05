@@ -1,0 +1,64 @@
+{
+  "module": "monetary_credit",
+  "updated_at": null,
+  "description": "货币信用与美元体系追踪",
+
+  "dollar_system": {
+    "dxy_index": {
+      "current": null,
+      "trend": null,
+      "52w_range": [null, null]
+    },
+    "us_10y_yield": {
+      "current": null,
+      "trend": null,
+      "real_yield": null
+    },
+    "fed_balance_sheet": {
+      "total_assets_trillion": null,
+      "trend": null,
+      "qt_pace": null
+    },
+    "us_fiscal_deficit": {
+      "current_year_trillion": null,
+      "debt_to_gdp": null,
+      "trend": "扩张"
+    }
+  },
+
+  "dollar_alternatives": {
+    "central_bank_gold_buying": {
+      "ytd_tonnes": null,
+      "top_buyers": [],
+      "trend": "持续增持"
+    },
+    "brics_currency_progress": {
+      "status": null,
+      "latest_development": null
+    },
+    "rmb_internationalization": {
+      "swift_share": null,
+      "trade_settlement_share": null,
+      "trend": null
+    }
+  },
+
+  "credit_stress_signals": {
+    "ted_spread": null,
+    "credit_spreads_hy": null,
+    "bank_cds": null,
+    "comment": "利差走阔=信用紧缩信号"
+  },
+
+  "inflation_expectations": {
+    "us_breakeven_10y": null,
+    "china_cpi": null,
+    "global_commodity_index": null
+  },
+
+  "historical_parallel": {
+    "reference": "1971年尼克松冲击 / 布雷顿森林体系瓦解",
+    "similarity_score": null,
+    "key_difference": "无明确替代锚"
+  }
+}
