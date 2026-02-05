@@ -251,6 +251,7 @@ export interface EvolutionEvent {
 }
 
 export type EvolutionEventType =
+  | 'engine_initialized'          // 引擎初始化
   | 'gap_identified'              // 发现能力缺口
   | 'generation_started'          // 开始生成skill
   | 'generation_completed'        // 生成完成

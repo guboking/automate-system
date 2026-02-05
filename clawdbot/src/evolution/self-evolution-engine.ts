@@ -211,7 +211,13 @@ export class SelfEvolutionEngine extends EventEmitter {
     skill.status = 'deployed';
 
     // 保存到文件系统
-    const paths = await this.compiler.saveSkill(skill, this.config.repository.path);
+    const savedPaths = await this.compiler.saveSkill(skill, this.config.repository.path);
+
+    // 转换路径格式
+    const paths = {
+      markdown: savedPaths.markdownPath,
+      typescript: savedPaths.typescriptPath,
+    };
 
     // 更新仓库
     await this.repository.updateEntry(skill.id, {
@@ -230,7 +236,7 @@ export class SelfEvolutionEngine extends EventEmitter {
     this.emit('skill-deployed', skill);
 
     if (this.config.deployment.notifyOnDeploy) {
-      console.log(`📦 技能 ${skill.template.name} 已部署到 ${paths.typescriptPath}`);
+      console.log(`📦 技能 ${skill.template.name} 已部署到 ${savedPaths.typescriptPath}`);
     }
   }
 
