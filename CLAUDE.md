@@ -1,3 +1,89 @@
+# AI 工作流规划系统 + 股票分析系统
+
+---
+
+## 0. AI 工作流规划系统（Planning-with-Files）
+
+> 基于 Superpowers 三阶段流程 + 文件持久化方案
+> 目标：解决 AI "没记性"（跨会话遗忘）和 "没章法"（执行偏离）问题
+
+### 0.1 触发条件
+
+**任何非简单问答的任务**都应启动规划流程，特别是：
+- 涉及多个文件修改的开发任务
+- 新功能开发或重构
+- 复杂的分析任务
+- 用户明确说「规划一下」「计划」「plan」
+
+### 0.2 新会话启动协议
+
+每次新会话开始时，**必须**按顺序读取：
+
+```
+1. CLAUDE.md              → 获取工作流指令
+2. .planning/knowledge.md → 了解项目背景和技术栈
+3. .planning/progress.md  → 了解上次进度和遗留问题
+4. .planning/task_plan.md → 了解当前任务计划和状态
+```
+
+### 0.3 三阶段执行流程（Superpowers 方法论）
+
+```
+Phase 1: Brainstorming（需求澄清）
+    ├── 记录用户原始需求
+    ├── 明确核心目标（G）
+    ├── 定义成功标准
+    └── 列出关键问题和约束
+          ↓
+Phase 2: Structured Plan（结构化计划）
+    ├── 分解为原子步骤
+    ├── 标注依赖关系
+    ├── 识别风险与回退方案
+    └── 写入 task_plan.md
+          ↓
+Phase 3: Verification（完成验证）
+    ├── 逐项检查交付物
+    ├── 记录验证证据（不许说"应该没问题"）
+    └── 更新 progress.md
+```
+
+### 0.4 文件管理规则
+
+| 文件 | 何时更新 | 谁更新 |
+|------|----------|--------|
+| `task_plan.md` | 新任务开始 / 计划调整 / 进入验证 | AI |
+| `progress.md` | 每完成一步 / 遇到阻塞 / 做出决策 / 会话结束 | AI |
+| `knowledge.md` | 架构决策 / 新模块 / 新约定 / 技术栈变更 | AI + 人 |
+
+### 0.5 管理工具
+
+```bash
+# 创建新任务
+python .planning/manage.py new "任务名称"
+
+# 查看当前状态
+python .planning/manage.py status
+
+# 添加进度记录
+python .planning/manage.py log "完成了XXX"
+
+# 标记任务完成
+python .planning/manage.py complete
+
+# 归档会话
+python .planning/manage.py archive
+```
+
+### 0.6 关键原则
+
+1. **先想后做** — 任何 >3 步的任务必须先写计划再动手
+2. **步步记录** — 每完成一步立即更新 progress.md
+3. **证据验证** — 完成验证必须附带证据，禁止"应该没问题"
+4. **文件即记忆** — 所有重要信息写入文件，不依赖对话上下文
+5. **最小改动** — 只做被要求的事，不过度工程化
+
+---
+
 # 股票分析系统
 
 ## 触发条件
@@ -166,6 +252,12 @@ def is_expired(updated_at, data_type):
 ## 6. 目录结构
 
 ```
+.planning/                          # AI 工作流规划系统
+├── task_plan.md                   # 当前任务计划（三阶段）
+├── progress.md                    # 进度追踪（跨会话）
+├── knowledge.md                   # 项目知识库（持久化）
+└── manage.py                      # 管理工具脚本
+
 ./stock_cache/
 ├── cache_index.json          # 索引：记录每只股票的更新时间
 ├── data/
