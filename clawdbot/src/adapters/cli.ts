@@ -125,6 +125,11 @@ export class CLIAdapter extends BaseAdapter {
     console.log(chalk.white('  /help      ') + chalk.gray('显示帮助'));
     console.log(chalk.white('  /quit      ') + chalk.gray('退出程序'));
     console.log(chalk.white('  /stock     ') + chalk.gray('股票分析 (例: /stock 比亚迪)'));
+    console.log(chalk.white('  /teams     ') + chalk.gray('查看可用 Agent 团队'));
+    console.log(chalk.white('  /team      ') + chalk.gray('团队协作 (例: /team 股票分析团队 分析比亚迪)'));
+    console.log(chalk.cyan('\n快捷指令:'));
+    console.log(chalk.white('  深度分析 XXX   ') + chalk.gray('多 Agent 团队深度分析'));
+    console.log(chalk.white('  辩论分析 XXX   ') + chalk.gray('多角度辩论式分析'));
     console.log(chalk.cyan('\n直接输入文字与 AI 对话\n'));
   }
 }
