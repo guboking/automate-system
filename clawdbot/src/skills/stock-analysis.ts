@@ -24,7 +24,7 @@ interface StockData {
   [key: string]: unknown;
 }
 
-// 常见股票名称映射
+// 常见股票/商品名称映射
 const STOCK_NAME_MAP: Record<string, string> = {
   '比亚迪': '002594.SZ',
   '茅台': '600519.SS',
@@ -36,7 +36,20 @@ const STOCK_NAME_MAP: Record<string, string> = {
   '阿里巴巴': 'BABA',
   '宁德时代': '300750.SZ',
   '中国平安': '601318.SS',
+  '黄金': 'XAU',
+  '白银': 'XAG',
+  '原油': 'CL',
+  '铂金': 'XPT',
+  '钯金': 'XPD',
+  '天然气': 'NG',
 };
+
+// 商品代码集合
+const COMMODITY_SYMBOLS = new Set([
+  'XAU', 'GOLD', 'XAG', 'SILVER', 'XPT', 'XPD',
+  'CL', 'OIL', 'BRENT', 'NG',
+  'SOYBEAN', 'CORN', 'WHEAT',
+]);
 
 export class StockAnalysisSkill extends BaseSkill {
   private apify!: ApifyClient;
@@ -203,7 +216,8 @@ export class StockAnalysisSkill extends BaseSkill {
 
     // 确定市场
     let market = '未知';
-    if (symbol.endsWith('.SS')) market = 'A股沪市';
+    if (COMMODITY_SYMBOLS.has(symbol.toUpperCase())) market = '大宗商品';
+    else if (symbol.endsWith('.SS')) market = 'A股沪市';
     else if (symbol.endsWith('.SZ')) market = 'A股深市';
     else if (symbol.endsWith('.HK')) market = '港股';
     else if (/^[A-Z]+$/.test(symbol)) market = '美股';
@@ -249,14 +263,99 @@ export class StockAnalysisSkill extends BaseSkill {
   }
 
   /**
-   * 通过 Python 脚本获取实时行情（新浪/东方财富免费接口）
+   * 执行 Python 脚本并解析返回的 JSON 数据
+   */
+  private async runPythonScript(scriptPath: string, symbol: string, name: string, market: string): Promise<StockData | null> {
+    const { stdout, stderr } = await execFileAsync('python3', [scriptPath, symbol], {
+      timeout: 30000,
+    });
+
+    if (stderr) {
+      console.warn(`[${path.basename(scriptPath)}] ${stderr.trim()}`);
+    }
+
+    const data = JSON.parse(stdout);
+
+    if (data.error) {
+      return null;
+    }
+
+    if (data.name && data.name !== symbol) {
+      name = data.name;
+    }
+
+    const stockData: StockData = {
+      symbol,
+      name,
+      market: data.market || market,
+      updated_at: data.updated_at || new Date().toISOString(),
+      price: data.price,
+      volume: data.volume,
+      turnover: data.turnover,
+      _source: data._source || 'akshare',
+    };
+
+    // 复制扩展字段
+    if (data.range_52w) stockData.range_52w = data.range_52w;
+    if (data.pe_ratio != null) stockData.pe_ratio = data.pe_ratio;
+    if (data.pb_ratio != null) stockData.pb_ratio = data.pb_ratio;
+    if (data.market_cap != null) stockData.market_cap = data.market_cap;
+    if (data.circ_market_cap != null) stockData.circ_market_cap = data.circ_market_cap;
+    if (data.turnover_rate != null) stockData.turnover_rate = data.turnover_rate;
+    if (data.eps != null) stockData.eps = data.eps;
+    if (data.capital_flow) stockData.capital_flow = data.capital_flow;
+    if (data.asset_type) stockData.asset_type = data.asset_type;
+
+    // 使用 LLM 基于真实数据生成分析
+    const analysisPrompt = `基于以下实时行情数据，为 ${name}（${symbol}）提供简要投资分析：
+
+${JSON.stringify(data, null, 2)}
+
+请给出：1. 现价与当日表现 2. 估值水平（如有PE/PB） 3. 简要投资建议
+用简洁的中文回复，200字以内。这些都是真实实时数据，不要编造。`;
+
+    try {
+      stockData.analysis = await this.llm.chat(analysisPrompt, {
+        systemPrompt: '你是专业的金融分析师。基于提供的真实数据进行分析，不要编造任何数据。',
+      });
+    } catch {
+      stockData.analysis = '实时数据已获取，LLM 分析生成失败。';
+    }
+
+    return stockData;
+  }
+
+  /**
+   * 通过 Python 脚本获取实时行情
+   * 优先使用 akshare（fetch_stock_ak.py），回退到旧脚本（fetch_stock.py）
    */
   private async fetchViaPython(symbol: string, name: string, market: string): Promise<StockData | null> {
-    // 定位 Python 脚本路径（相对于项目根目录）
-    const scriptPath = path.resolve(
+    // 优先使用 akshare 脚本
+    const akScriptPath = path.resolve(
+      path.dirname(fileURLToPath(import.meta.url)),
+      '../../scripts/fetch_stock_ak.py'
+    );
+    // 旧脚本作为回退
+    const legacyScriptPath = path.resolve(
       path.dirname(fileURLToPath(import.meta.url)),
       '../../scripts/fetch_stock.py'
     );
+
+    // 优先尝试 akshare
+    try {
+      const akResult = await this.runPythonScript(akScriptPath, symbol, name, market);
+      if (akResult) return akResult;
+    } catch (error) {
+      console.warn(`akshare script failed for ${symbol}: ${(error as Error).message}`);
+    }
+
+    // 商品类不支持旧脚本，直接返回 null
+    if (COMMODITY_SYMBOLS.has(symbol.toUpperCase())) {
+      return null;
+    }
+
+    // 回退到旧脚本（仅股票）
+    const scriptPath = legacyScriptPath;
 
     try {
       const { stdout, stderr } = await execFileAsync('python3', [scriptPath, symbol], {
@@ -415,20 +514,25 @@ ${JSON.stringify(item, null, 2)}
       ``,
       `📍 市场: ${data.market}`,
       `🕐 更新时间: ${new Date(data.updated_at).toLocaleString('zh-CN')}`,
-      `📡 数据来源: ${data._source === 'apify' ? 'Apify' : data._source === 'eastmoney' ? '东方财富' : data._source === 'sina_finance' ? '新浪财经' : 'AI 分析'}`,
+      `📡 数据来源: ${data._source === 'akshare' ? 'AKShare' : data._source === 'akshare_sge' ? 'AKShare(上海金交所)' : data._source === 'akshare_futures' ? 'AKShare(期货)' : data._source === 'apify' ? 'Apify' : data._source === 'eastmoney' ? '东方财富' : data._source === 'sina_finance' ? '新浪财经' : 'AI 分析'}`,
       ``,
     ];
 
     // 如果有真实行情数据，展示详细信息
     if (data.price && data.price.current) {
+      const isCommodity = data.asset_type === 'commodity' || data.market === '大宗商品';
+      const price = data.price as Record<string, unknown>;
+      const unit = price.unit ? ` (${price.unit})` : '';
+
       lines.push(
         `---`,
         ``,
-        `### 📊 股价概览`,
-        `- 现价: **${data.price.current}**`,
-        `- 昨收: ${data.price.prev_close}`,
-        `- 涨跌幅: ${data.price.change_pct}`,
+        isCommodity ? `### 📊 价格概览` : `### 📊 股价概览`,
+        `- 现价: **${data.price.current}**${unit}`,
       );
+
+      if (data.price.prev_close) lines.push(`- 昨收: ${data.price.prev_close}`);
+      if (data.price.change_pct) lines.push(`- 涨跌幅: ${data.price.change_pct}`);
 
       if (data.range_52w) {
         const range = data.range_52w as { low: number; high: number };
@@ -436,7 +540,6 @@ ${JSON.stringify(item, null, 2)}
         lines.push(`- 52周区间: ${range.low} ~ ${range.high} (当前位于 ${position}%)`);
       }
 
-      const price = data.price as Record<string, unknown>;
       if (price.open) lines.push(`- 今开: ${price.open}`);
       if (price.high && price.low) lines.push(`- 日内区间: ${price.low} ~ ${price.high}`);
       if (data.pe_ratio) lines.push(`- PE: ${data.pe_ratio}`);
@@ -444,6 +547,14 @@ ${JSON.stringify(item, null, 2)}
       if (data.volume) lines.push(`- 成交量: ${data.volume}`);
       if (data.turnover) lines.push(`- 成交额: ${data.turnover}`);
       if (data.turnover_rate) lines.push(`- 换手率: ${data.turnover_rate}`);
+
+      // 资金流向
+      const capitalFlow = data.capital_flow as Record<string, string> | undefined;
+      if (capitalFlow) {
+        lines.push(``, `### 💰 资金流向`);
+        if (capitalFlow.main_net) lines.push(`- 主力净流入: ${capitalFlow.main_net}`);
+        if (capitalFlow.retail_net) lines.push(`- 小单净流入: ${capitalFlow.retail_net}`);
+      }
 
       lines.push(``);
     }

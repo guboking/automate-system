@@ -1,19 +1,24 @@
 {
-  "version": "1.0",
+  "version": "1.1",
   "created_at": "2025-12-07",
+  "data_engine": "akshare",
   "cache_validity": {
     "price": "24h",
     "company_info": "7d",
-    "news": "6h"
+    "news": "6h",
+    "commodity": "4h"
   },
+  "asset_types": ["stock", "commodity"],
   "entries": {
     "002594.SZ": {
       "name": "比亚迪",
+      "asset_type": "stock",
       "updated_at": "2025-12-07T14:00:00Z",
       "data_types": ["price", "fundamentals", "analyst", "capital_flow"]
     },
     "1211.HK": {
       "name": "比亚迪股份",
+      "asset_type": "stock",
       "updated_at": "2025-12-07T14:00:00Z",
       "data_types": ["price", "analyst", "technical"]
     }
