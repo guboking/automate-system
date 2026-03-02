@@ -3,6 +3,7 @@
 import * as fs from 'fs/promises';
 import * as path from 'path';
 import { BaseSkill } from './base.js';
+import { ApifyClient } from '../services/apify-client.js';
 import type { SkillManifest, SkillResult, ConversationContext, Permission } from '../types/index.js';
 
 interface StockData {
@@ -33,6 +34,7 @@ const STOCK_NAME_MAP: Record<string, string> = {
 };
 
 export class StockAnalysisSkill extends BaseSkill {
+  private apify!: ApifyClient;
   manifest: SkillManifest = {
     name: 'stock-analysis',
     version: '1.0.0',
@@ -67,6 +69,8 @@ export class StockAnalysisSkill extends BaseSkill {
   async onLoad(): Promise<void> {
     // 确保缓存目录存在
     await fs.mkdir(this.cacheDir, { recursive: true });
+    // 初始化 Apify 客户端
+    this.apify = new ApifyClient();
   }
 
   async execute(
@@ -199,7 +203,17 @@ export class StockAnalysisSkill extends BaseSkill {
     else if (symbol.endsWith('.HK')) market = '港股';
     else if (/^[A-Z]+$/.test(symbol)) market = '美股';
 
-    // 使用 LLM 获取数据描述（实际应调用行情 API）
+    // 优先使用 Apify 获取真实数据
+    if (this.apify.isConfigured) {
+      try {
+        const realData = await this.fetchViaApify(symbol, name, market);
+        if (realData) return realData;
+      } catch (error) {
+        console.warn(`Apify fetch failed for ${symbol}, falling back to LLM: ${(error as Error).message}`);
+      }
+    }
+
+    // 回退：使用 LLM 生成分析（无实时数据时）
     const prompt = `请为股票 ${name}（${symbol}）提供一个简要的投资分析摘要，包括：
 1. 当前大致股价区间
 2. 公司主营业务
@@ -221,17 +235,132 @@ export class StockAnalysisSkill extends BaseSkill {
     };
   }
 
+  /**
+   * 通过 Apify 获取真实股票数据
+   */
+  private async fetchViaApify(symbol: string, name: string, market: string): Promise<StockData | null> {
+    // 转换为 Yahoo Finance 格式的代码
+    const yahooSymbol = this.toYahooSymbol(symbol);
+
+    const result = await this.apify.runByName('yahoo-finance', {
+      symbols: [yahooSymbol],
+    }, { timeoutSecs: 60, maxItems: 1 });
+
+    if (!result.success || result.items.length === 0) {
+      return null;
+    }
+
+    const item = result.items[0];
+
+    // 构建标准化的股票数据
+    const stockData: StockData = {
+      symbol,
+      name: (item.shortName as string) || (item.longName as string) || name,
+      market,
+      updated_at: new Date().toISOString(),
+      price: {
+        current: Number(item.regularMarketPrice) || 0,
+        prev_close: Number(item.regularMarketPreviousClose) || 0,
+        change_pct: item.regularMarketChangePercent
+          ? `${Number(item.regularMarketChangePercent) >= 0 ? '+' : ''}${Number(item.regularMarketChangePercent).toFixed(2)}%`
+          : '0%',
+      },
+      _source: 'apify',
+    };
+
+    // 添加可用的扩展数据
+    if (item.fiftyTwoWeekLow !== undefined) {
+      stockData.range_52w = {
+        low: Number(item.fiftyTwoWeekLow),
+        high: Number(item.fiftyTwoWeekHigh),
+      };
+    }
+    if (item.marketCap !== undefined) {
+      stockData.market_cap = item.marketCap;
+    }
+    if (item.trailingPE !== undefined) {
+      stockData.pe_ratio = Number(item.trailingPE);
+    }
+    if (item.priceToBook !== undefined) {
+      stockData.pb_ratio = Number(item.priceToBook);
+    }
+    if (item.volume !== undefined) {
+      stockData.volume = item.volume;
+    }
+
+    // 使用 LLM 基于真实数据生成分析
+    const analysisPrompt = `基于以下真实市场数据，为 ${name}（${symbol}）提供简要投资分析：
+
+${JSON.stringify(item, null, 2)}
+
+请给出：1. 现价与趋势 2. 估值水平 3. 简要投资建议
+用简洁的中文回复，200字以内。注意：这些都是真实数据，不要编造。`;
+
+    try {
+      stockData.analysis = await this.llm.chat(analysisPrompt, {
+        systemPrompt: '你是专业的股票分析师。基于提供的真实数据进行分析，不要编造任何数据。',
+      });
+    } catch {
+      stockData.analysis = '数据已获取，分析生成失败。';
+    }
+
+    return stockData;
+  }
+
+  /**
+   * 将内部代码转换为 Yahoo Finance 格式
+   */
+  private toYahooSymbol(symbol: string): string {
+    // A股沪市: 600519.SS → 600519.SS (Yahoo 同格式)
+    // A股深市: 002594.SZ → 002594.SZ (Yahoo 同格式)
+    // 港股: 01211.HK → 1211.HK (Yahoo 去前导零)
+    // 美股: TSLA → TSLA (直接使用)
+    if (symbol.endsWith('.HK')) {
+      const code = symbol.replace('.HK', '').replace(/^0+/, '');
+      return `${code}.HK`;
+    }
+    return symbol;
+  }
+
   private async generateReport(data: StockData): Promise<string> {
     const lines = [
       `📊 **${data.name}** (${data.symbol})`,
       ``,
       `📍 市场: ${data.market}`,
       `🕐 更新时间: ${new Date(data.updated_at).toLocaleString('zh-CN')}`,
+      `📡 数据来源: ${data._source === 'apify' ? 'Apify 实时数据' : 'AI 分析'}`,
       ``,
+    ];
+
+    // 如果有真实行情数据，展示详细信息
+    if (data.price && data.price.current) {
+      lines.push(
+        `---`,
+        ``,
+        `### 📊 股价概览`,
+        `- 现价: **${data.price.current}**`,
+        `- 昨收: ${data.price.prev_close}`,
+        `- 涨跌幅: ${data.price.change_pct}`,
+      );
+
+      if (data.range_52w) {
+        const range = data.range_52w as { low: number; high: number };
+        const position = ((data.price.current - range.low) / (range.high - range.low) * 100).toFixed(0);
+        lines.push(`- 52周区间: ${range.low} ~ ${range.high} (当前位于 ${position}%)`);
+      }
+
+      if (data.pe_ratio) lines.push(`- PE: ${data.pe_ratio}`);
+      if (data.pb_ratio) lines.push(`- PB: ${data.pb_ratio}`);
+      if (data.volume) lines.push(`- 成交量: ${data.volume}`);
+
+      lines.push(``);
+    }
+
+    lines.push(
       `---`,
       ``,
       data.analysis as string || '暂无分析数据',
-    ];
+    );
 
     return lines.join('\n');
   }
