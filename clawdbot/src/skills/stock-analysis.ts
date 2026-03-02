@@ -2,9 +2,14 @@
 
 import * as fs from 'fs/promises';
 import * as path from 'path';
+import { execFile } from 'child_process';
+import { promisify } from 'util';
+import { fileURLToPath } from 'url';
 import { BaseSkill } from './base.js';
 import { ApifyClient } from '../services/apify-client.js';
 import type { SkillManifest, SkillResult, ConversationContext, Permission } from '../types/index.js';
+
+const execFileAsync = promisify(execFile);
 
 interface StockData {
   symbol: string;
@@ -203,17 +208,25 @@ export class StockAnalysisSkill extends BaseSkill {
     else if (symbol.endsWith('.HK')) market = '港股';
     else if (/^[A-Z]+$/.test(symbol)) market = '美股';
 
-    // 优先使用 Apify 获取真实数据
+    // 优先级 1：Python 脚本直连国内行情接口（免费、实时、最快）
+    try {
+      const realData = await this.fetchViaPython(symbol, name, market);
+      if (realData) return realData;
+    } catch (error) {
+      console.warn(`Python fetch failed for ${symbol}: ${(error as Error).message}`);
+    }
+
+    // 优先级 2：Apify（适合美股、需要 Token）
     if (this.apify.isConfigured) {
       try {
         const realData = await this.fetchViaApify(symbol, name, market);
         if (realData) return realData;
       } catch (error) {
-        console.warn(`Apify fetch failed for ${symbol}, falling back to LLM: ${(error as Error).message}`);
+        console.warn(`Apify fetch failed for ${symbol}: ${(error as Error).message}`);
       }
     }
 
-    // 回退：使用 LLM 生成分析（无实时数据时）
+    // 优先级 3：LLM 生成分析（无实时数据时的兜底）
     const prompt = `请为股票 ${name}（${symbol}）提供一个简要的投资分析摘要，包括：
 1. 当前大致股价区间
 2. 公司主营业务
@@ -233,6 +246,80 @@ export class StockAnalysisSkill extends BaseSkill {
       updated_at: new Date().toISOString(),
       analysis: response,
     };
+  }
+
+  /**
+   * 通过 Python 脚本获取实时行情（新浪/东方财富免费接口）
+   */
+  private async fetchViaPython(symbol: string, name: string, market: string): Promise<StockData | null> {
+    // 定位 Python 脚本路径（相对于项目根目录）
+    const scriptPath = path.resolve(
+      path.dirname(fileURLToPath(import.meta.url)),
+      '../../scripts/fetch_stock.py'
+    );
+
+    try {
+      const { stdout, stderr } = await execFileAsync('python3', [scriptPath, symbol], {
+        timeout: 15000,
+      });
+
+      if (stderr) {
+        console.warn(`[fetch_stock.py] ${stderr.trim()}`);
+      }
+
+      const data = JSON.parse(stdout);
+
+      // 脚本返回了 error 字段说明没拿到数据
+      if (data.error) {
+        return null;
+      }
+
+      // 用实际获取的名称，如果有的话
+      if (data.name && data.name !== symbol) {
+        name = data.name;
+      }
+
+      const stockData: StockData = {
+        symbol,
+        name,
+        market: data.market || market,
+        updated_at: data.updated_at || new Date().toISOString(),
+        price: data.price,
+        volume: data.volume,
+        turnover: data.turnover,
+        _source: data._source || 'python_script',
+      };
+
+      // 复制扩展字段
+      if (data.range_52w) stockData.range_52w = data.range_52w;
+      if (data.pe_ratio != null) stockData.pe_ratio = data.pe_ratio;
+      if (data.pb_ratio != null) stockData.pb_ratio = data.pb_ratio;
+      if (data.market_cap != null) stockData.market_cap = data.market_cap;
+      if (data.circ_market_cap != null) stockData.circ_market_cap = data.circ_market_cap;
+      if (data.turnover_rate != null) stockData.turnover_rate = data.turnover_rate;
+      if (data.eps != null) stockData.eps = data.eps;
+
+      // 使用 LLM 基于真实数据生成分析
+      const analysisPrompt = `基于以下实时行情数据，为 ${name}（${symbol}）提供简要投资分析：
+
+${JSON.stringify(data, null, 2)}
+
+请给出：1. 现价与当日表现 2. 估值水平（如有PE/PB） 3. 简要投资建议
+用简洁的中文回复，200字以内。这些都是真实实时数据，不要编造。`;
+
+      try {
+        stockData.analysis = await this.llm.chat(analysisPrompt, {
+          systemPrompt: '你是专业的股票分析师。基于提供的真实数据进行分析，不要编造任何数据。',
+        });
+      } catch {
+        stockData.analysis = '实时数据已获取，LLM 分析生成失败。';
+      }
+
+      return stockData;
+    } catch (error) {
+      // Python 未安装或脚本不存在时静默失败
+      return null;
+    }
   }
 
   /**
@@ -328,7 +415,7 @@ ${JSON.stringify(item, null, 2)}
       ``,
       `📍 市场: ${data.market}`,
       `🕐 更新时间: ${new Date(data.updated_at).toLocaleString('zh-CN')}`,
-      `📡 数据来源: ${data._source === 'apify' ? 'Apify 实时数据' : 'AI 分析'}`,
+      `📡 数据来源: ${data._source === 'apify' ? 'Apify' : data._source === 'eastmoney' ? '东方财富' : data._source === 'sina_finance' ? '新浪财经' : 'AI 分析'}`,
       ``,
     ];
 
@@ -349,9 +436,14 @@ ${JSON.stringify(item, null, 2)}
         lines.push(`- 52周区间: ${range.low} ~ ${range.high} (当前位于 ${position}%)`);
       }
 
+      const price = data.price as Record<string, unknown>;
+      if (price.open) lines.push(`- 今开: ${price.open}`);
+      if (price.high && price.low) lines.push(`- 日内区间: ${price.low} ~ ${price.high}`);
       if (data.pe_ratio) lines.push(`- PE: ${data.pe_ratio}`);
       if (data.pb_ratio) lines.push(`- PB: ${data.pb_ratio}`);
       if (data.volume) lines.push(`- 成交量: ${data.volume}`);
+      if (data.turnover) lines.push(`- 成交额: ${data.turnover}`);
+      if (data.turnover_rate) lines.push(`- 换手率: ${data.turnover_rate}`);
 
       lines.push(``);
     }
