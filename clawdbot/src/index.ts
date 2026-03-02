@@ -6,6 +6,7 @@ import { CLIAdapter } from './adapters/cli.js';
 import { ModelOrchestrator } from './models/orchestrator.js';
 import { SkillRegistry } from './skills/registry.js';
 import { StockAnalysisSkill } from './skills/stock-analysis.js';
+import { ApifyScraperSkill } from './skills/apify-scraper.js';
 import type { UnifiedMessage, ConversationContext } from './types/index.js';
 
 class Clawdbot {
@@ -37,6 +38,7 @@ class Clawdbot {
   async start(): Promise<void> {
     // 注册技能
     await this.skills.register(new StockAnalysisSkill());
+    await this.skills.register(new ApifyScraperSkill());
 
     // 设置消息处理器
     this.adapter.onMessage(this.handleMessage.bind(this));
@@ -63,6 +65,7 @@ class Clawdbot {
     const response = await this.llm.chat(text, {
       systemPrompt: `你是 Clawdbot，一个智能助手。你可以：
 - 分析股票（例如：分析比亚迪、看看茅台怎么样）
+- 抓取全网数据（例如：抓取 Google Maps 数据、爬取 TikTok 热门视频）
 - 回答各种问题
 - 进行日常对话
 
