@@ -1,0 +1,85 @@
+{
+  "symbol": "Y（豆油期货）",
+  "name": "豆油期货",
+  "market": "大连商品交易所（DCE）",
+  "updated_at": "2026-03-23T10:30:00Z",
+
+  "price": {
+    "main_contract": "Y2509",
+    "current_domestic": "8790-9330元/吨（沿海一级现货）",
+    "cbot_price": "65.41-67.34美分/磅",
+    "cbot_ytd_return": "+37.33%",
+    "cbot_1m_return": "+19.62%",
+    "cbot_6m_return": "+29.18%",
+    "spot_prices": {
+      "张家港": "8932元/吨",
+      "广东": "9022元/吨",
+      "天津": "8852元/吨"
+    }
+  },
+
+  "fundamentals": {
+    "global_soybean_production_2025_26": "4.27亿吨（连续第四年创纪录）",
+    "brazil_production": "1.80亿吨（创历史新高，+4%）",
+    "argentina_production": "4800万吨（-6%，干旱减产）",
+    "us_crush_record": "25.8亿蒲式耳（创纪录）",
+    "us_soyoil_ending_stocks": "17.82亿磅（上调）",
+    "us_soyoil_jan_stocks": "24.3亿磅（接近三年高位）",
+    "china_soybean_import_2025": "1.1183亿吨（+6.5%，创历史新高）",
+    "china_import_structure": {
+      "巴西": "73.6%",
+      "美国": "15.0%",
+      "阿根廷": "7.1%"
+    },
+    "domestic_soyoil_inventory": "89.09万吨（历史同期偏高）",
+    "oil_mill_utilization": "54.23%（节后复工中）",
+    "oil_share_in_crush": "51.9%（2025年8月以来最高）",
+    "consumption": "节后淡季，同比下降20-30%"
+  },
+
+  "biofuel_policy": {
+    "us_rvo_2026_biomass_diesel": "56.1亿加仑（+67% vs 2025年）",
+    "us_soyoil_biofuel_use": "139亿磅（2025/26），173亿磅（2026/27预估）",
+    "indonesia_b40": "维持，B50已推迟",
+    "eu_red3": "取消废弃油脂双重计量，作物基生物柴油需求增加",
+    "brazil_b15": "维持"
+  },
+
+  "trade_policy": {
+    "china_us_soybean_tariff": "约13%（基础3%+加征10%）",
+    "china_us_purchase_agreement": "2026-2028年每年不少于2500万吨",
+    "china_canada_canola_tariff": "约15%反倾销税（2026年3月起五年）"
+  },
+
+  "positions": {
+    "cftc_managed_money_net": "净空39,838手（截至3月17日）",
+    "cftc_commercial_trend": "连续6周净卖出，创52周看空新低",
+    "dce_top20_net": "净空约4.27万手",
+    "dce_top_short": "中粮期货166,902手空头",
+    "dba_etf_1m_inflow": "+2.42亿美元",
+    "cbot_term_structure": "backwardation（现货升水）"
+  },
+
+  "macro": {
+    "crude_oil_wti": "~96美元/桶",
+    "crude_oil_brent": "~107美元/桶",
+    "iran_conflict": "霍尔木兹海峡受阻，预计4月缓和",
+    "usd_index": "~98.86（2025年1月109.96下跌约10%）",
+    "usdcny": "7.00-7.05（预计下半年升至6.90-6.95）",
+    "boho_breakeven": "78美分/磅（当前65美分，仍有上行空间）"
+  },
+
+  "substitutes": {
+    "palm_oil_price": "9150-9610元/吨（沿海24度）",
+    "soy_palm_spread": "约-900元/吨（豆油低于棕榈油）",
+    "rapeseed_oil_forecast": "约9550元/吨（2026年均价）",
+    "palm_oil_inventory_malaysia": "281.5万吨（-7.72%）"
+  },
+
+  "institutional_views": {
+    "domestic_consensus": "前高后低，全年均价约8513元/吨",
+    "usda_2026_27_price": "0.58美元/磅（+9.4%）",
+    "fastmarkets_apr_2026": "65.25美分/磅",
+    "cbot_technical_signal": "Strong Buy"
+  }
+}
