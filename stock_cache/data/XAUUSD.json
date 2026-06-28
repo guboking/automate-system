@@ -1,0 +1,36 @@
+{
+  "symbol": "XAUUSD",
+  "name": "现货黄金",
+  "market": "国际现货",
+  "updated_at": "2026-05-10T12:00:00Z",
+
+  "price": {
+    "current": 4720.00,
+    "prev_close": 4715.78,
+    "weekly_change_pct": "+2.0%",
+    "range_week": [4635.00, 4728.17],
+    "unit": "USD/oz"
+  },
+
+  "technical": {
+    "support": [4672.83, 4653.17, 4635.33],
+    "resistance": [4710.33, 4728.17, 4747.83],
+    "bias": "bullish",
+    "signal": "站上200日均线，61.8%斐波回撤位上方",
+    "weekly_target_range": [4769.11, 4887.55],
+    "weekly_avg_forecast": 4828.33
+  },
+
+  "macro": {
+    "fed_stance": "hawkish hold (3.50-3.75%)",
+    "june_cut_probability": "5.1%",
+    "key_event": "May 12 - April CPI release",
+    "geopolitics": "中东危机持续，霍尔木兹紧张"
+  },
+
+  "demand": {
+    "wgc_q1_2026": "1230.9吨，同比+2%（创纪录）"
+  },
+
+  "news": []
+}
